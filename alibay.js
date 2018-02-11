@@ -1,4 +1,5 @@
 const assert = require('assert');
+const fs = require('fs');
 
 let itemsBought = {}; // map that keeps track of all the items a user has bought
 let itemsSold = {};
@@ -98,6 +99,7 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, sellerID, listingID) {
     console.log("BUYING!")
     if(listing[listingID].buyer === undefined /*&& buyerID != sellerID*/) {
+        console.log("In the loop!")
         listing[listingID].buyer = buyerID;
         itemsSold[sellerID].concat(listing[listingID]);
         itemsBought[buyerID].concat(listing[listingID]);
@@ -149,14 +151,13 @@ function searchForListings(searchTerm) {
         }
     }
     return searchedItems;
-    }
+}
 
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
     initializeUserIfNeeded,
     putItemsBought,
     getItemsBought,
-    initializeUserIfNeeded,
     allItemsBought,
     createListing,
     getItemDescription,
