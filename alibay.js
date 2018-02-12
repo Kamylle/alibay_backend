@@ -5,6 +5,28 @@ let itemsBought = new Map(); // map that keeps track of all the items a user has
 let itemsSold = new Map();
 let listing = new Map();
 
+/*
+Temporary Fake items
+*/
+
+listing.set('123', {
+    "seller": "sellerNo1",
+    "price": "5000000",
+    "blurb": "A very nice boat"
+});
+
+listing.set('456', {
+    "seller": "sellerNo2",
+    "price": "1000",
+    "blurb": "Faux fur gloves"
+});
+
+listing.set('789', {
+    "seller": "sellerNo3",
+    "price": "100",
+    "blurb": "Running shoes",
+    "buyer": "buyerNo1"
+});
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -112,11 +134,15 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, sellerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
+    var seller = item.seller;
     
-    if(buyer === undefined) {
+    if(buyer === undefined && seller != buyerID) {
         item["buyer"] = buyerID;
         itemsSold.set(listingID, item);
         itemsBought.set(listingID, item);
+    }
+    if (seller === buyerID) {
+        return "You can't buy your own items";
     }
 }
 
