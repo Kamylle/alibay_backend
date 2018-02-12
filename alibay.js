@@ -1,9 +1,9 @@
 const assert = require('assert');
 const fs = require('fs');
 
-let itemsBought = {}; // map that keeps track of all the items a user has bought
-let itemsSold = {};
-let listing = {};
+let itemsBought = new Map(); // map that keeps track of all the items a user has bought
+let itemsSold = new Map();
+let listing = new Map();
 
 
 /*
@@ -44,7 +44,17 @@ allItemsBought returns the IDs of all the items bought by a buyer
     returns: an array of listing IDs
 */
 function allItemsBought(buyerID) {
-    return itemsBought[buyerID];    
+    let arrayOfListings = [];
+
+    var logElements = (value, key, map) => {
+        if (value.buyer == buyerID) {
+            arrayOfListings.push(key);
+        }
+    }
+
+    listing.forEach(logElements);
+
+    return arrayOfListings;
 }
 
 /* 
@@ -60,12 +70,12 @@ function createListing(sellerID, price, blurb) {
     let listingID = genUID();
 
     let listingItem = {
-        "sellerID": sellerID,
+        "seller": sellerID,
         "price": price,
-        "blurb": blurb,
+        "blurb": blurb
     };
 
-  listing[listingID] = listingItem;
+  listing.set(listingID, listingItem);
 
   return listingID;
 }
@@ -76,9 +86,12 @@ getItemDescription returns the description of a listing
     returns: An object containing the price and blurb properties.
 */
 function getItemDescription(listingID) {
+    var item = listing.get(listingID);
+    var price = item.price;
+    var blurb = item.blurb;
     let itemGot = {
-        "price": listing[listingID].price,
-        "blurb": listing[listingID].blurb 
+        "price": price,
+        "blurb": blurb
     };
 
     return itemGot;
@@ -97,14 +110,14 @@ The seller will see the listing in his history of items sold
     returns: undefined
 */
 function buy(buyerID, sellerID, listingID) {
-    console.log("BUYING!")
-    if(listing[listingID].buyer === undefined /*&& buyerID != sellerID*/) {
-        console.log("In the loop!")
-        listing[listingID].buyer = buyerID;
-        itemsSold[sellerID].concat(listing[listingID]);
-        itemsBought[buyerID].concat(listing[listingID]);
+    var item = listing.get(listingID);
+    var buyer = item.buyer;
+    
+    if(buyer === undefined) {
+        item["buyer"] = buyerID;
+        itemsSold.set(listingID, item);
+        itemsBought.set(listingID, item);
     }
-    console.log("BOUGHT!")
 }
 
 
@@ -114,7 +127,17 @@ allItemsSold returns the IDs of all the items sold by a seller
     returns: an array of listing IDs
 */
 function allItemsSold(sellerID) {
-    return itemsSold[sellerID];
+    var arrayOfListings = [];
+
+    var logElements = (value, key, map) => {
+        if (value.buyer) {
+            arrayOfListings.push(key);
+        }
+    }
+
+    listing.forEach(logElements);
+
+    return arrayOfListings;
 }
 
 /*
@@ -123,13 +146,15 @@ Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
 function allListings() {
-    let availableItems = []
+    let availableItems = [];
 
-    for (let item in listing) {
-        if (!listing[item].buyer) {
-          availableList.concat(item);
+    var logElements = (value, key, map) => {
+        if (value.buyer == undefined) {
+            availableItems.push(key);
         }
     }
+
+    listing.forEach(logElements);
 
     return availableItems;
 }
@@ -143,13 +168,18 @@ Once an item is sold, it will not be returned by searchForListings
 function searchForListings(searchTerm) {
     let searchedItems = [];
 
-    for (let item in listing) {
-        if (!listing[item].buyer) {
-            if (listing[item].blurb.includes(searchTerm)) {
-                searchedItems.push(item);
+    var logElements = (value, key, map) => {
+        if (value.buyer == undefined) {
+            if (value.blurb.includes(searchTerm)) {
+            searchedItems.push(key);
             }
         }
     }
+
+    listing.forEach(logElements);
+
+    console.log("Searched Items = " + searchedItems)
+
     return searchedItems;
 }
 
