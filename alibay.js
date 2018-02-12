@@ -5,7 +5,7 @@ let itemsBought = new Map(); // map that keeps track of all the items a user has
 let itemsSold = new Map();
 let listing = new Map();
 
-let loginInfo = {};
+let loginInfos = {};
 
 /*
 Temporary Fake items
