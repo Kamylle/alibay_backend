@@ -64,18 +64,21 @@ function initializeUserIfNeeded(uid) {
 
 function signUp(username, password) {
     if(!loginInfos[username] && !undefined) {
-        loginInfos[username] = password;
+        let uID = genUID();
+        loginInfos[username] = {};
+        loginInfos[username].password = password;
+        loginInfos[username].userID = uID;
         //fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
-        res.send("success");
-        console.log("Signed in!")
+        return "success";
+        console.log("Signed in!");
     }
 }
 function login(username, password) {
-    if (loginInfos[username] === password) {
-        res.send("success");
+    if (loginInfos[username].password === password) {
+        return loginInfos[username].userID;
     }
     else {
-        res.send("fail");
+        return "fail";
     }
 }
 /*
