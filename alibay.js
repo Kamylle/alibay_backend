@@ -46,8 +46,6 @@ function getItemsBought(userID) {
     }
     return ret;
 }
-
-
 /*
 initializeUserIfNeeded adds the UID to our database unless it's already there
 parameter: [uid] the UID of the user.
@@ -59,7 +57,6 @@ function initializeUserIfNeeded(uid) {
         putItemsBought(uid, {});
     }
 }
-
 /*
 allItemsBought returns the IDs of all the items bought by a buyer
     parameter: [buyerID] The ID of the buyer
@@ -73,9 +70,7 @@ function allItemsBought(buyerID) {
             arrayOfListings.push(key);
         }
     }
-
     listing.forEach(logElements);
-
     return arrayOfListings;
 }
 
@@ -96,12 +91,9 @@ function createListing(sellerID, price, blurb) {
         "price": price,
         "blurb": blurb
     };
-
   listing.set(listingID, listingItem);
-
   return listingID;
 }
-
 /* 
 getItemDescription returns the description of a listing
     parameter: [listingID] The ID of the listing
@@ -111,14 +103,13 @@ function getItemDescription(listingID) {
     var item = listing.get(listingID);
     var price = item.price;
     var blurb = item.blurb;
+
     let itemGot = {
         "price": price,
         "blurb": blurb
     };
-
     return itemGot;
 }
-
 /* 
 buy changes the global state.
 Another buyer will not be able to purchase that listing
@@ -145,43 +136,36 @@ function buy(buyerID, sellerID, listingID) {
         return "You can't buy your own items";
     }
 }
-
-
 /* 
 allItemsSold returns the IDs of all the items sold by a seller
     parameter: [sellerID] The ID of the seller
     returns: an array of listing IDs
 */
-function allItemsSold(sellerID) {
+function allItemsSold(userID) {
     var arrayOfListings = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer) {
+        if (value.buyer && value.seller === userID) {
             arrayOfListings.push(key);
         }
     }
-
     listing.forEach(logElements);
-
     return arrayOfListings;
 }
-
 /*
 allListings returns the IDs of all the listings currently on the market
 Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
-function allListings() {
+function allListings(userID) {
     let availableItems = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer == undefined) {
+        if (value.buyer == undefined && value.seller != userID) {
             availableItems.push(key);
         }
     }
-
     listing.forEach(logElements);
-
     return availableItems;
 }
 
@@ -191,24 +175,19 @@ Once an item is sold, it will not be returned by searchForListings
     parameter: [searchTerm] The search string matching listing descriptions
     returns: an array of listing IDs
 */
-function searchForListings(searchTerm) {
+function searchForListings(searchTerm, userID) {
     let searchedItems = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer == undefined) {
+        if (value.buyer == undefined && value.seller != userID) {
             if (value.blurb.includes(searchTerm)) {
             searchedItems.push(key);
             }
         }
     }
-
     listing.forEach(logElements);
-
-    console.log("Searched Items = " + searchedItems)
-
     return searchedItems;
 }
-
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
     initializeUserIfNeeded,
