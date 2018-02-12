@@ -15,6 +15,22 @@ app.get('/itemsBought', (req, res) => {
     res.send(JSON.stringify(alibay.getItemsBought(uid)));
 });
 
+/* Login */
+
+app.post('/signUp', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+
+    res.send(JSON.stringify(alibay.signUp(username, password)));
+})
+
+app.post('/login', (req, res) => {
+    let username = req.body.username;
+    let password = req.body.password;
+
+    res.send(JSON.stringify(alibay.logIn(username, password)));
+})
+
 
 
 app.get('/allItemsBought', (req, res) => {

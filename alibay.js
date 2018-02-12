@@ -5,6 +5,8 @@ let itemsBought = new Map(); // map that keeps track of all the items a user has
 let itemsSold = new Map();
 let listing = new Map();
 
+let loginInfo = {};
+
 /*
 Temporary Fake items
 */
@@ -55,6 +57,25 @@ function initializeUserIfNeeded(uid) {
     var items = getItemsBought[uid];
     if(items == undefined) {
         putItemsBought(uid, {});
+    }
+}
+
+/* Login */
+
+function signUp(username, password) {
+    if(!loginInfos[username] && !undefined) {
+        loginInfos[username] = password;
+        //fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
+        res.send("success");
+        console.log("Signed in!")
+    }
+}
+function login(username, password) {
+    if (loginInfos[username] === password) {
+        res.send("success");
+    }
+    else {
+        res.send("fail");
     }
 }
 /*
