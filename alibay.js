@@ -7,28 +7,33 @@ let listing = new Map();
 
 let loginInfos = {};
 
-/*
-Temporary Fake items
-*/
+/*Converting Maps into Json and vice versa*/
 
-listing.set('123', {
-    "seller": "sellerNo1",
-    "price": "5000000",
-    "blurb": "A very nice boat"
-});
+function mapToJson(map) {
+    return JSON.stringify([...map]);
+}
+function jsonToMap(jsonStr) {
+    return new Map(JSON.parse(jsonStr));
+}
 
-listing.set('456', {
-    "seller": "sellerNo2",
-    "price": "1000",
-    "blurb": "Faux fur gloves"
-});
+/*File write and read*/
 
-listing.set('789', {
-    "seller": "sellerNo3",
-    "price": "100",
-    "blurb": "Running shoes",
-    "buyer": "buyerNo1"
-});
+let listingData = mapToJson(fs.readFileSync('listing-infos.txt'))
+listing = jsonToMap(listingData);
+
+let loginData = fs.readFileSync('login-infos.txt').toString()
+loginInfos = JSON.parse(loginData);
+
+/*Temporary Fake items*/
+
+var tempItems = ["123", "456", "789"];
+var temsContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very nice boat"},
+{"seller": "sellerNo2","price": "1000","blurb": "Faux fur gloves"},
+{"seller": "sellerNo3","price": "100","blurb": "Running shoes","buyer": "buyerNo1"}
+];
+listing.set(tempItems[1], temsContent[1]);
+listing.set(tempItems[2], temsContent[2]);
+listing.set(tempItems[3], temsContent[3]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -68,7 +73,7 @@ function signUp(username, password) {
         loginInfos[username] = {};
         loginInfos[username].password = password;
         loginInfos[username].userID = uID;
-        //fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
+        fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
         return "success";
         console.log("Signed in!");
     }
@@ -116,6 +121,7 @@ function createListing(sellerID, price, blurb) {
         "blurb": blurb
     };
   listing.set(listingID, listingItem);
+  fs.writeFileSync('listing-infos.txt', JSON.stringify(listing));
   return listingID;
 }
 /* 
@@ -150,11 +156,13 @@ function buy(buyerID, sellerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
     var seller = item.seller;
+    console.log("In the buy Function");
     
     if(buyer === undefined && seller != buyerID) {
         item["buyer"] = buyerID;
         itemsSold.set(listingID, item);
         itemsBought.set(listingID, item);
+        fs.writeFileSync('listing-infos.txt', JSON.stringify(listing));
     }
     if (seller === buyerID) {
         return "You can't buy your own items";
@@ -183,6 +191,7 @@ Once an item is sold, it will not be returned by allListings
 */
 function allListings(userID) {
     let availableItems = [];
+    console.log("In the allListings Function");
 
     var logElements = (value, key, map) => {
         if (value.buyer == undefined && value.seller != userID) {
