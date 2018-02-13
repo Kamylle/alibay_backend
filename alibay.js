@@ -3,37 +3,39 @@ const fs = require('fs');
 
 let itemsBought = new Map(); // map that keeps track of all the items a user has bought
 let itemsSold = new Map();
-let listing = new Map();
+let listing;
 
 let loginInfos = {};
 
-/*Converting Maps into Json and vice versa*/
-
+/*Converting Maps into Json*/
 function mapToJson(map) {
-    return JSON.stringify([...map]);
-}
-function jsonToMap(jsonStr) {
-    return new Map(JSON.parse(jsonStr));
+    let arr = [];
+    var loopTrough = (value, key, map) => {
+        arr.push([key, value]);
+    }
+    listing.forEach(loopTrough);
+    return JSON.stringify(arr);
 }
 
 /*File write and read*/
+let listingData = fs.readFileSync('listing-infos.txt');
+let parsedData = JSON.parse(listingData);
+listing = new Map(parsedData);
 
-let listingData = mapToJson(fs.readFileSync('listing-infos.txt'))
-listing = jsonToMap(listingData);
 
-let loginData = fs.readFileSync('login-infos.txt').toString()
+let loginData = fs.readFileSync('login-infos.txt').toString();
 loginInfos = JSON.parse(loginData);
 
 /*Temporary Fake items*/
 
 var tempItems = ["123", "456", "789"];
-var temsContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very nice boat"},
+var tempContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very nice boat"},
 {"seller": "sellerNo2","price": "1000","blurb": "Faux fur gloves"},
 {"seller": "sellerNo3","price": "100","blurb": "Running shoes","buyer": "buyerNo1"}
 ];
-listing.set(tempItems[1], temsContent[1]);
-listing.set(tempItems[2], temsContent[2]);
-listing.set(tempItems[3], temsContent[3]);
+listing.set(tempItems[1], tempContent[1]);
+listing.set(tempItems[2], tempContent[2]);
+listing.set(tempItems[3], tempContent[3]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -118,10 +120,11 @@ function createListing(sellerID, price, blurb) {
     let listingItem = {
         "seller": sellerID,
         "price": price,
-        "blurb": blurb
+        "blurb": blurb,
+        "buyer": false
     };
   listing.set(listingID, listingItem);
-  fs.writeFileSync('listing-infos.txt', JSON.stringify(listing));
+  fs.writeFileSync('listing-infos.txt', mapToJson(listing));
   return listingID;
 }
 /* 
@@ -156,13 +159,14 @@ function buy(buyerID, sellerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
     var seller = item.seller;
-    console.log("In the buy Function");
     
-    if(buyer === undefined && seller != buyerID) {
+    if(buyer == false && seller != buyerID) {
         item["buyer"] = buyerID;
+        //item.buyer = buyerID;
+        //listing.set(listingID, {...item, buyer: buyerID});
         itemsSold.set(listingID, item);
         itemsBought.set(listingID, item);
-        fs.writeFileSync('listing-infos.txt', JSON.stringify(listing));
+        fs.writeFileSync('listing-infos.txt', mapToJson(listing));
     }
     if (seller === buyerID) {
         return "You can't buy your own items";
@@ -177,7 +181,7 @@ function allItemsSold(userID) {
     var arrayOfListings = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer && value.seller === userID) {
+        if (value.buyer != false && value.seller === userID) {
             arrayOfListings.push(key);
         }
     }
@@ -191,10 +195,9 @@ Once an item is sold, it will not be returned by allListings
 */
 function allListings(userID) {
     let availableItems = [];
-    console.log("In the allListings Function");
 
     var logElements = (value, key, map) => {
-        if (value.buyer == undefined && value.seller != userID) {
+        if (value.buyer == false && value.seller != userID) {
             availableItems.push(key);
         }
     }
@@ -212,7 +215,7 @@ function searchForListings(searchTerm, userID) {
     let searchedItems = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer == undefined && value.seller != userID) {
+        if (value.buyer == false && value.seller != userID) {
             if (value.blurb.includes(searchTerm)) {
             searchedItems.push(key);
             }
@@ -232,7 +235,9 @@ module.exports = {
     buy,
     allItemsSold,
     allListings,
-    searchForListings
+    searchForListings,
+    signUp,
+    login
 
 
     // Add all the other functions that need to be exported
