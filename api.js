@@ -44,11 +44,10 @@ app.post('/createListing', (req, res) => {
     let sellerID = req.body.sellerID;
     let price = req.body.price;
     let blurb = req.body.blurb;
-
     res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb)));
 });
 
-app.get('/getItemDescription', (req, res) => {
+app.post('/getItemDescription', (req, res) => {
     let listingID = req.body.listingID; /*Should we change Query for Body?*/
     res.send(JSON.stringify(alibay.getItemDescription(listingID)));
 });

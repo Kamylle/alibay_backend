@@ -33,9 +33,9 @@ var tempContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very ni
 {"seller": "sellerNo2","price": "1000","blurb": "Faux fur gloves"},
 {"seller": "sellerNo3","price": "100","blurb": "Running shoes","buyer": "buyerNo1"}
 ];
+listing.set(tempItems[0], tempContent[0]);
 listing.set(tempItems[1], tempContent[1]);
 listing.set(tempItems[2], tempContent[2]);
-listing.set(tempItems[3], tempContent[3]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -134,6 +134,7 @@ getItemDescription returns the description of a listing
     returns: An object containing the price and blurb properties.
 */
 function getItemDescription(listingID) {
+    console.log(listing, listingID);
     var item = listing.get(listingID);
     var price = item.price;
     var blurb = item.blurb;
@@ -194,11 +195,11 @@ allListings returns the IDs of all the listings currently on the market
 Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
-function allListings(userID) {
+function allListings() {
     let availableItems = [];
-
+    console.log(listing);
     var logElements = (value, key, map) => {
-        if (value.buyer == false && value.seller != userID) {
+        if (!value.buyer) {
             availableItems.push(key);
         }
     }
