@@ -83,6 +83,7 @@ function signUp(username, password) {
 function login(username, password) {
     if (loginInfos[username].password === password) {
         return loginInfos[username].userID;
+        console.log("Signed in!" + loginInfos[username].userID);
     }
     else {
         return "fail";

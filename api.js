@@ -21,14 +21,16 @@ app.post('/signUp', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    res.send(JSON.stringify(alibay.signUp(username, password)));
+    console.log(alibay.signUp(username, password));
+    res.send(alibay.signUp(username, password));
+
 })
 
 app.post('/login', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    res.send(JSON.stringify(alibay.logIn(username, password)));
+    res.send(alibay.login(username, password));
 })
 
 
