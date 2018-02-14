@@ -21,16 +21,14 @@ app.post('/signUp', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    console.log(alibay.signUp(username, password));
-    res.send(alibay.signUp(username, password));
-
+    res.send(JSON.stringify(alibay.signUp(username, password)));
 })
 
 app.post('/login', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    res.send(alibay.login(username, password));
+    res.send(JSON.stringify(alibay.login(username, password)));
 })
 
 
@@ -66,12 +64,12 @@ app.get('/allItemsSold', (req, res) => {
 });
 
 app.get('/allListings', (req, res) => {
-    let uid = req.query.uid; /*Should we change Query for Body?*/
-    res.send(JSON.stringify(alibay.allListings(uid)));
+    //let uid = req.query.uid; /*Should we change Query for Body?*/
+    res.send(JSON.stringify(alibay.allListings()));
 });
 
 app.get('/searchForListings', (req, res) => {
-    let searchTerm = req.query.uid; /*Should we change Query for Body?*/
+    let searchTerm = req.query.searchTerm; /*Should we change Query for Body?*/
     res.send(JSON.stringify(alibay.searchForListings(searchTerm)));
 });
 
