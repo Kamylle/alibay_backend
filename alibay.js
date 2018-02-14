@@ -194,11 +194,11 @@ allListings returns the IDs of all the listings currently on the market
 Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
-function allListings(userID) {
+function allListings() {
     let availableItems = [];
-
+    console.log(listing);
     var logElements = (value, key, map) => {
-        if (value.buyer == false && value.seller != userID) {
+        if (!value.buyer) {
             availableItems.push(key);
         }
     }
@@ -212,11 +212,11 @@ Once an item is sold, it will not be returned by searchForListings
     parameter: [searchTerm] The search string matching listing descriptions
     returns: an array of listing IDs
 */
-function searchForListings(searchTerm, userID) {
+function searchForListings(searchTerm) {
     let searchedItems = [];
 
     var logElements = (value, key, map) => {
-        if (value.buyer == false && value.seller != userID) {
+        if (value.buyer == false) {
             if (value.blurb.includes(searchTerm)) {
             searchedItems.push(key);
             }
