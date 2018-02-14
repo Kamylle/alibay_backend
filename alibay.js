@@ -28,14 +28,27 @@ loginInfos = JSON.parse(loginData);
 
 /*Temporary Fake items*/
 
-var tempItems = ["123", "456", "789"];
-var tempContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very nice boat"},
-{"seller": "sellerNo2","price": "1000","blurb": "Faux fur gloves"},
-{"seller": "sellerNo3","price": "100","blurb": "Running shoes","buyer": "buyerNo1"}
+var tempItems = ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9"];
+var tempContent = [
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
 ];
+listing.set(tempItems[0], tempContent[0]);
 listing.set(tempItems[1], tempContent[1]);
 listing.set(tempItems[2], tempContent[2]);
 listing.set(tempItems[3], tempContent[3]);
+listing.set(tempItems[4], tempContent[4]);
+listing.set(tempItems[5], tempContent[5]);
+listing.set(tempItems[6], tempContent[6]);
+listing.set(tempItems[7], tempContent[7]);
+listing.set(tempItems[8], tempContent[8]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -70,23 +83,40 @@ function initializeUserIfNeeded(uid) {
 /* Login */
 
 function signUp(username, password) {
-    if(!loginInfos[username] && !undefined) {
-        let uID = genUID();
-        loginInfos[username] = {};
-        loginInfos[username].password = password;
-        loginInfos[username].userID = uID;
-        fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
-        return "success";
-        console.log("Signed in!");
+    let uID = genUID();
+    try {
+        if(loginInfos[username] === true) {
+            return "Username not available";
+        }
+        else if (username === undefined) {return "Username is not defined"}
+        else if (password === undefined) {return "Password is not defined"}
+        else if (username.length < 1) {return "Something wrong with username"}
+        else if (password.length < 1) {return "Something wrong with password"}
+        else {
+            loginInfos[username] = {};
+            loginInfos[username].password = password;
+            loginInfos[username].userID = uID;
+            fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
+            return "success";
+        }
+    }
+    catch(err) {
+        return "Signup Failed"
     }
 }
+
 function login(username, password) {
-    if (loginInfos[username].password === password) {
-        return loginInfos[username].userID;
-        console.log("Signed in!" + loginInfos[username].userID);
+    try {
+        if (loginInfos[username].password === password) {
+            console.log("Signed in!" + loginInfos[username].userID);
+            return loginInfos[username].userID;
+        }
+        else {
+            return "fail";
+        }
     }
-    else {
-        return "fail";
+    catch(err) {
+        return "Login Failed"
     }
 }
 /*

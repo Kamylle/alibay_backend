@@ -34,13 +34,19 @@ function test() {
     // assert(boatBlurb == "A very nice boat");
     // assert(boatPrice == 500000);
 
-    let signupTry1 = alibay.signUp("b", "b");
-    let loginTry1 = alibay.login("b", "b");
+    //let signupTry1 = alibay.signUp("b", "b");
+    //let loginTry1 = alibay.login("b", "b");
     //let loginTry2 = alibay.login("d", "d");
+    let signupTry2 = alibay.signUp(" ", " ");
+    let signupTry3 = alibay.signUp("123");
 
-    assert(signupTry1 == "success");
+    //assert(signupTry1 == "success");
     //assert(loginTry1 == "22226308");
     //assert(loginTry2 == "fail");
+    console.log(signupTry2);
+    console.log(signupTry3);
+    assert(signupTry2 == "Username is not defined");
+    assert(signupTry3 == "Password is not defined");
 
 }
 test();
