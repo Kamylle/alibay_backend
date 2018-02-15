@@ -1,18 +1,40 @@
 const alibay = require('./alibay');
 const express = require('express');
 const bodyParser = require('body-parser');
-var cors = require('cors');
+const cors = require('cors');
+const session = require('express-session');
 
 const app = express();
 
 app.use(cors());
 app.use(bodyParser.json());
 
+function generateUUID(){
+    var d = new Date().getTime(),
+        pattern = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+  
+    return pattern.replace(/[xy]/g, function(c) {
+      var r = (d + Math.random()*16)%16 | 0
+      d = Math.floor(d/16)
+      return (c=='x' ? r : (r&0x3|0x8)).toString(16)
+    })
+}
 
-/*This function is for testing purposes only*/
-app.get('/itemsBought', (req, res) => {
-    let uid = req.query.uid;
-    res.send(JSON.stringify(alibay.getItemsBought(uid)));
+app.use(session({
+    genid: function(req) {
+      return generateUUID() // use UUIDs for session IDs
+    },
+    secret: 'mimainkabooskifu'
+}))
+
+app.get('/', (req, res) => {
+    if (req.session.uid) {
+        res.send(JSON.stringify(req.session.uid));
+    }
+    else {
+        res.send(JSON.stringify("no cookies"));
+    }
+    
 });
 
 /* Login */
@@ -21,6 +43,8 @@ app.post('/signUp', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
+    
+    req.session.uid = JSON.stringify(alibay.login(username, password));
     res.send(JSON.stringify(alibay.signUp(username, password)));
 })
 
@@ -28,10 +52,17 @@ app.post('/login', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
+    
+    req.session.uid = JSON.stringify(alibay.login(username, password));
     res.send(JSON.stringify(alibay.login(username, password)));
 })
 
 
+/*This function is for testing purposes only*/
+app.get('/itemsBought', (req, res) => {
+    let uid = req.query.uid;
+    res.send(JSON.stringify(alibay.getItemsBought(uid)));
+});
 
 app.get('/allItemsBought', (req, res) => {
     let uid = req.body.uid; /*Should we change Query for Body?*/
@@ -53,10 +84,9 @@ app.post('/getItemDescription', (req, res) => {
 
 app.post('/buy', (req, res) => {
     let buyerID = req.body.buyerID;
-    let sellerID = req.body.sellerID;
     let listingID = req.body.listingID;
 
-    res.send(JSON.stringify(alibay.buy(buyerID, sellerID, listingID)));
+    res.send(JSON.stringify(alibay.buy(buyerID, listingID)));
 });
 
 app.get('/allItemsSold', (req, res) => {
@@ -76,4 +106,4 @@ app.get('/searchForListings', (req, res) => {
 
 
 
-app.listen(4000, () => console.log('Listening on port 3000!'))
+app.listen(4000, () => console.log('Listening on port 4000!'))

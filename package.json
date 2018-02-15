@@ -12,6 +12,7 @@
     "assert": "^1.4.1",
     "cors": "^2.8.4",
     "express": "^4.16.2",
+    "express-session": "^1.15.6",
     "fs-extra": "^5.0.0",
     "sha1": "^1.1.1"
   }

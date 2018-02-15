@@ -33,12 +33,12 @@ var tempContent = [
     {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
     {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
     {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
-    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
-    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
+    {"seller": "11111111","price": "400","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "500","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "600","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
+    {"seller": "11111111","price": "700","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "800","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "900","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
 ];
 listing.set(tempItems[0], tempContent[0]);
 listing.set(tempItems[1], tempContent[1]);
@@ -85,13 +85,9 @@ function initializeUserIfNeeded(uid) {
 function signUp(username, password) {
     let uID = genUID();
     try {
-        if(loginInfos[username] === true) {
+        if(loginInfos[username] !== undefined) {
             return "Username not available";
         }
-        else if (username === undefined) {return "Username is not defined"}
-        else if (password === undefined) {return "Password is not defined"}
-        else if (username.length < 1) {return "Something wrong with username"}
-        else if (password.length < 1) {return "Something wrong with password"}
         else {
             loginInfos[username] = {};
             loginInfos[username].password = password;
@@ -186,21 +182,22 @@ The seller will see the listing in his history of items sold
      [listingID] The ID of listing
     returns: undefined
 */
-function buy(buyerID, sellerID, listingID) {
+function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
     var seller = item.seller;
     
-    if(buyer == false && seller != buyerID) {
+    if (seller === buyerID) {
+        return "You can't buy your own items";
+    }
+    if(!buyer) {
         item["buyer"] = buyerID;
         //item.buyer = buyerID;
         //listing.set(listingID, {...item, buyer: buyerID});
         itemsSold.set(listingID, item);
         itemsBought.set(listingID, item);
         fs.writeFileSync('listing-infos.txt', mapToJson(listing));
-    }
-    if (seller === buyerID) {
-        return "You can't buy your own items";
+        return "Purchase successful!";
     }
 }
 /* 
