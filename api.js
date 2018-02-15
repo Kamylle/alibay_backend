@@ -56,6 +56,10 @@ app.post('/login', (req, res) => {
     res.send(JSON.stringify(alibay.login(username, password)));
 })
 
+app.post('/logout', (req, res) => {
+    req.session.destroy();
+});
+
 
 /*This function is for testing purposes only*/
 app.get('/itemsBought', (req, res) => {
