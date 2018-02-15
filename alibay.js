@@ -54,7 +54,8 @@ listing.set(tempItems[8], tempContent[8]);
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
 function genUID() {
-    return Math.floor(Math.random() * 100000000)
+    var random = Math.floor(Math.random() * 1000000000000);
+    return random.toString();
 }
 
 function putItemsBought(userID, value) {
@@ -104,7 +105,6 @@ function signUp(username, password) {
 function login(username, password) {
     try {
         if (loginInfos[username].password === password) {
-            console.log("Signed in!" + loginInfos[username].userID);
             return loginInfos[username].userID;
         }
         else {
@@ -190,7 +190,7 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
-    var seller = item.seller;
+    //var seller = item.seller;
     
     if (seller === buyerID) {
         return "You can't buy your own items";
@@ -228,7 +228,6 @@ Once an item is sold, it will not be returned by allListings
 */
 function allListings() {
     let availableItems = [];
-    // console.log(listing);
     var logElements = (value, key, map) => {
         if (!value.buyer) {
             availableItems.push(key);
@@ -257,6 +256,18 @@ function searchForListings(searchTerm) {
     listing.forEach(logElements);
     return searchedItems;
 }
+
+/*
+getUsername takes a userID as a parameter and returns the username related
+*/
+function getUsername(uID) {
+    for (var key in loginInfos) {
+        if (loginInfos[key].userID === uID && uID !== undefined) {
+            return key;
+        }
+    }
+}
+
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
     initializeUserIfNeeded,
@@ -270,7 +281,8 @@ module.exports = {
     allListings,
     searchForListings,
     signUp,
-    login
+    login,
+    getUsername
 
 
     // Add all the other functions that need to be exported
