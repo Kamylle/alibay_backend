@@ -33,12 +33,12 @@ var tempContent = [
     {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
     {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
     {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
-    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
-    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
+    {"seller": "11111111","price": "400","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "500","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "600","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
+    {"seller": "11111111","price": "700","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "800","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "900","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
 ];
 listing.set(tempItems[0], tempContent[0]);
 listing.set(tempItems[1], tempContent[1]);
@@ -49,7 +49,6 @@ listing.set(tempItems[5], tempContent[5]);
 listing.set(tempItems[6], tempContent[6]);
 listing.set(tempItems[7], tempContent[7]);
 listing.set(tempItems[8], tempContent[8]);
-
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -84,23 +83,36 @@ function initializeUserIfNeeded(uid) {
 /* Login */
 
 function signUp(username, password) {
-    if(!loginInfos[username] && !undefined) {
-        let uID = genUID();
-        loginInfos[username] = {};
-        loginInfos[username].password = password;
-        loginInfos[username].userID = uID;
-        fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
-        return "success";
-        console.log("Signed in!");
+    let uID = genUID();
+    try {
+        if(loginInfos[username] !== undefined) {
+            return "Username not available";
+        }
+        else {
+            loginInfos[username] = {};
+            loginInfos[username].password = password;
+            loginInfos[username].userID = uID;
+            fs.writeFileSync('login-infos.txt', JSON.stringify(loginInfos));
+            return "success";
+        }
+    }
+    catch(err) {
+        return "Signup Failed"
     }
 }
+
 function login(username, password) {
-    if (loginInfos[username].password === password) {
-        return loginInfos[username].userID;
-        console.log("Signed in!" + loginInfos[username].userID);
+    try {
+        if (loginInfos[username].password === password) {
+            console.log("Signed in!" + loginInfos[username].userID);
+            return loginInfos[username].userID;
+        }
+        else {
+            return "fail";
+        }
     }
-    else {
-        return "fail";
+    catch(err) {
+        return "Login Failed"
     }
 }
 /*
