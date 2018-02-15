@@ -3,18 +3,20 @@ var assert = require('assert');
 
 function test() {
     let sellerID = alibay.genUID();
+    console.log(sellerID);
     let buyerID = alibay.genUID();
+    console.log(buyerID);
 
-    // alibay.initializeUserIfNeeded(sellerID)
-    // alibay.initializeUserIfNeeded(buyerID)
+    alibay.initializeUserIfNeeded(sellerID)
+    alibay.initializeUserIfNeeded(buyerID)
 
-    // let listing1ID = alibay.createListing(sellerID, 500000, "A very nice boat")
-    // let listing2ID = alibay.createListing(sellerID, 1000, "Faux fur gloves")
-    // let listing3ID = alibay.createListing(sellerID, 100, "Running shoes")
-    // let product2Description =  alibay.getItemDescription(listing2ID)
+    let listing1ID = alibay.createListing(sellerID, 500000, "A very nice boat")
+    let listing2ID = alibay.createListing(sellerID, 1000, "Faux fur gloves")
+    let listing3ID = alibay.createListing(sellerID, 100, "Running shoes")
+    let product2Description =  alibay.getItemDescription(listing2ID)
 
-    // alibay.buy(buyerID, sellerID, listing2ID)
-    // alibay.buy(buyerID, sellerID, listing3ID)
+    alibay.buy(buyerID, sellerID, listing2ID)
+    alibay.buy(buyerID, sellerID, listing3ID)
 
     // let allSold = alibay.allItemsSold(sellerID)
     // let soldDescriptions = allSold.map(alibay.getItemDescription)
@@ -37,16 +39,16 @@ function test() {
     //let signupTry1 = alibay.signUp("b", "b");
     //let loginTry1 = alibay.login("b", "b");
     //let loginTry2 = alibay.login("d", "d");
-    let signupTry2 = alibay.signUp(" ", " ");
-    let signupTry3 = alibay.signUp("123");
+    // let signupTry2 = alibay.signUp(" ", " ");
+    // let signupTry3 = alibay.signUp("123");
 
     //assert(signupTry1 == "success");
     //assert(loginTry1 == "22226308");
     //assert(loginTry2 == "fail");
-    console.log(signupTry2);
-    console.log(signupTry3);
-    assert(signupTry2 == "Username is not defined");
-    assert(signupTry3 == "Password is not defined");
+    // console.log(signupTry2);
+    // console.log(signupTry3);
+    // assert(signupTry2 == "Username is not defined");
+    // assert(signupTry3 == "Password is not defined");
 
 }
 test();
