@@ -98,8 +98,9 @@ app.get('/allListings', (req, res) => {
     res.send(JSON.stringify(alibay.allListings()));
 });
 
-app.get('/searchForListings', (req, res) => {
-    let searchTerm = req.query.searchTerm; /*Should we change Query for Body?*/
+app.post('/searchForListings', (req, res) => {
+    let searchTerm = req.body.searchTerm; /*Should we change Query for Body?*/
+    console.log(searchTerm)
     res.send(JSON.stringify(alibay.searchForListings(searchTerm)));
 });
 
