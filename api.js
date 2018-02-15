@@ -34,7 +34,8 @@ app.post('/login', (req, res) => {
 
 
 app.get('/allItemsBought', (req, res) => {
-    let uid = req.body.uid; /*Should we change Query for Body?*/
+    let uid = req.query.uid; /*Should we change Query for Body?*/
+    console.log(uid)
     res.send(JSON.stringify(alibay.allItemsBought(uid)));
 });
 
@@ -55,11 +56,11 @@ app.post('/buy', (req, res) => {
     let sellerID = req.body.sellerID;
     let listingID = req.body.listingID;
 
-    res.send(JSON.stringify(alibay.buy(buyerID, sellerID, listingID)));
+    res.send(JSON.stringify(alibay.buy(buyerID, listingID)));
 });
 
 app.get('/allItemsSold', (req, res) => {
-    let uid = req.body.uid; /*Should we change Query for Body?*/
+    let uid = req.query.uid; /*Should we change Query for Body?*/
     res.send(JSON.stringify(alibay.allItemsSold(uid)));
 });
 

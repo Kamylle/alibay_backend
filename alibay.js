@@ -28,14 +28,28 @@ loginInfos = JSON.parse(loginData);
 
 /*Temporary Fake items*/
 
-var tempItems = ["123", "456", "789"];
-var tempContent = [{"seller": "sellerNo1","price": "5000000","blurb": "A very nice boat"},
-{"seller": "sellerNo2","price": "1000","blurb": "Faux fur gloves"},
-{"seller": "sellerNo3","price": "100","blurb": "Running shoes","buyer": "buyerNo1"}
+var tempItems = ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9"];
+var tempContent = [
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
+    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
 ];
 listing.set(tempItems[0], tempContent[0]);
 listing.set(tempItems[1], tempContent[1]);
 listing.set(tempItems[2], tempContent[2]);
+listing.set(tempItems[3], tempContent[3]);
+listing.set(tempItems[4], tempContent[4]);
+listing.set(tempItems[5], tempContent[5]);
+listing.set(tempItems[6], tempContent[6]);
+listing.set(tempItems[7], tempContent[7]);
+listing.set(tempItems[8], tempContent[8]);
+
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -116,6 +130,7 @@ This function is incomplete. You need to complete it.
     returns: The ID of the new listing
 */
 function createListing(sellerID, price, blurb) {
+
     let listingID = genUID();
 
     let listingItem = {
@@ -125,6 +140,7 @@ function createListing(sellerID, price, blurb) {
         "buyer": false
     };
   listing.set(listingID, listingItem);
+  console.log(listingItem)
   fs.writeFileSync('listing-infos.txt', mapToJson(listing));
   return listingID;
 }
@@ -134,14 +150,16 @@ getItemDescription returns the description of a listing
     returns: An object containing the price and blurb properties.
 */
 function getItemDescription(listingID) {
-    console.log(listing, listingID);
+    // console.log(listing, listingID);
     var item = listing.get(listingID);
     var price = item.price;
     var blurb = item.blurb;
+    var seller = item.seller
 
     let itemGot = {
         "price": price,
-        "blurb": blurb
+        "blurb": blurb,
+        "seller": seller
     };
     return itemGot;
 }
@@ -157,21 +175,22 @@ The seller will see the listing in his history of items sold
      [listingID] The ID of listing
     returns: undefined
 */
-function buy(buyerID, sellerID, listingID) {
+function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
     var seller = item.seller;
     
-    if(buyer == false && seller != buyerID) {
+    if (seller === buyerID) {
+        return "You can't buy your own items";
+    }
+    if(!buyer) {
         item["buyer"] = buyerID;
         //item.buyer = buyerID;
         //listing.set(listingID, {...item, buyer: buyerID});
         itemsSold.set(listingID, item);
         itemsBought.set(listingID, item);
         fs.writeFileSync('listing-infos.txt', mapToJson(listing));
-    }
-    if (seller === buyerID) {
-        return "You can't buy your own items";
+        return "Purchase successful!";
     }
 }
 /* 
@@ -197,7 +216,7 @@ Once an item is sold, it will not be returned by allListings
 */
 function allListings() {
     let availableItems = [];
-    console.log(listing);
+    // console.log(listing);
     var logElements = (value, key, map) => {
         if (!value.buyer) {
             availableItems.push(key);
