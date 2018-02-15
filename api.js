@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
-
 const app = express();
 
 app.use(cors());
@@ -24,17 +23,19 @@ app.use(session({
     genid: function(req) {
       return generateUUID() // use UUIDs for session IDs
     },
-    secret: 'mimainkabooskifu'
+    secret: 'mimainkabooskifu',
+    cookie: {
+        maxAge: 600000
+    }
 }))
 
-app.get('/', (req, res) => {
+app.get('/check', (req, res) => {
     if (req.session.uid) {
         res.send(JSON.stringify(req.session.uid));
     }
     else {
         res.send(JSON.stringify("no cookies"));
     }
-    
 });
 
 /* Login */
@@ -43,15 +44,13 @@ app.post('/signUp', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    
-    req.session.uid = JSON.stringify(alibay.login(username, password));
     res.send(JSON.stringify(alibay.signUp(username, password)));
+    req.session.uid = JSON.stringify(alibay.login(username, password));
 })
 
 app.post('/login', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-
     
     req.session.uid = JSON.stringify(alibay.login(username, password));
     res.send(JSON.stringify(alibay.login(username, password)));
