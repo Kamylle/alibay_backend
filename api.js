@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.raw({ type: 'image/*', limit: '20mb' })); // To allow for image uploads.
 app.use(bodyParser.json());
-app.use(express.static('images'));
+app.use('/img', express.static('img'));
 
 function generateUUID(){
     var d = new Date().getTime(),
@@ -92,7 +92,6 @@ app.post('/uploadedPictures', (req, res) => {
     const extension = req.query.ext.split('.').pop(); 
     const requestBody = req.body;
     res.send(JSON.stringify(alibay.uploadImage(extension, requestBody)));
-
 })
 
 app.post('/getItemDescription', (req, res) => {
