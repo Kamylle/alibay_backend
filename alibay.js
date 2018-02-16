@@ -276,9 +276,9 @@ Image upload
 */
 function uploadImage(extension, requestBody) {
     const randomString = '' +  Math.floor(Math.random() * 9999999999999);
-    const fileName = randomString + '.' + extension;
-    fs.writeFileSync('images/' + fileName, requestBody);
-    return fileName;
+    const filename = randomString + '.' + extension;
+    fs.writeFileSync('img/' + filename, requestBody);
+    return filename;
 }
 
 /*
@@ -311,8 +311,9 @@ module.exports = {
     searchForListings,
     signUp,
     login,
-    uploadImage,
-    removeItem
+    getUsername,
+    uploadImage
+
 
 
     // Add all the other functions that need to be exported
