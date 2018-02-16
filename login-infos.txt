@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"User1":{"password":"356a192b7913b04c54574d18c28d46e6395428ab","userID":11111111},"User2":{"password":"da4b9237bacccdf19c0760cab7aec4a8359010b0","userID":22222222},"User3":{"password":"77de68daecd823babbb58edb1c8e14d7106e83bb","userID":33333333},"mam":{"password":"7b52009b64fd0a2a49e6d8a939753077792b0554","userID":28427517}}
-=======
 {"User1":{"password":"356a192b7913b04c54574d18c28d46e6395428ab","userID":"11111111"},"User2":{"password":"da4b9237bacccdf19c0760cab7aec4a8359010b0","userID":"22222222"},"User3":{"password":"77de68daecd823babbb58edb1c8e14d7106e83bb","userID":"33333333"},"Kamylle":{"password":"356a192b7913b04c54574d18c28d46e6395428ab","userID":"166079413192"}}
->>>>>>> 69004f56535766f96c0bf6b1d3c41a9bcfac714d
