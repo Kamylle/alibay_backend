@@ -78,9 +78,9 @@ app.post('/createListing', (req, res) => {
     let sellerID = req.body.sellerID;
     let price = req.body.price;
     let blurb = req.body.blurb;
-    let description = req.body.description;
     let imagePath = req.body.picturePath;
-    res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb,description, imagePath)));
+    let description = req.body.description;
+    res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb, imagePath, description)));
 });
 
 app.post('/uploadedPictures', (req, res) => {
@@ -115,6 +115,11 @@ app.get('/allItemsSold', (req, res) => {
 app.get('/allListings', (req, res) => {
     let uid = req.query.uid;
     res.send(JSON.stringify(alibay.allListings(uid)));
+});
+
+app.get('/itemsToSell', (req, res) => {
+    let uid = req.query.uid;
+    res.send(JSON.stringify(alibay.itemsToSell(uid)));
 });
 
 app.post('/searchForListings', (req, res) => {

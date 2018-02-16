@@ -26,29 +26,6 @@ listing = new Map(parsedData);
 let loginData = fs.readFileSync('login-infos.txt').toString();
 loginInfos = JSON.parse(loginData);
 
-/*Temporary Fake items*/
-
-// var tempItems = ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9"];
-// var tempContent = [
-//     {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
-//     {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
-//     {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
-//     {"seller": "11111111","price": "400","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-//     {"seller": "22222222","price": "500","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-//     {"seller": "33333333","price": "600","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
-//     {"seller": "11111111","price": "700","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-//     {"seller": "22222222","price": "800","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-//     {"seller": "33333333","price": "900","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
-// ];
-// listing.set(tempItems[0], tempContent[0]);
-// listing.set(tempItems[1], tempContent[1]);
-// listing.set(tempItems[2], tempContent[2]);
-// listing.set(tempItems[3], tempContent[3]);
-// listing.set(tempItems[4], tempContent[4]);
-// listing.set(tempItems[5], tempContent[5]);
-// listing.set(tempItems[6], tempContent[6]);
-// listing.set(tempItems[7], tempContent[7]);
-// listing.set(tempItems[8], tempContent[8]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -143,7 +120,7 @@ This function is incomplete. You need to complete it.
       [blurb] A blurb describing the item
     returns: The ID of the new listing
 */
-function createListing(sellerID, price, blurb, description, imagePath) {
+function createListing(sellerID, price, blurb, imagePath, description) {
 
     let listingID = genUID();
 
@@ -152,11 +129,10 @@ function createListing(sellerID, price, blurb, description, imagePath) {
         "price": price,
         "blurb": blurb,
         "buyer": false,
-        "description": description,
-        "imagePath": imagePath
+        "imagePath": imagePath,
+        "description": description
     };
   listing.set(listingID, listingItem);
-//   console.log(listingItem)
   fs.writeFileSync('listing-infos.txt', mapToJson(listing));
   return listingID;
 }
@@ -246,6 +222,19 @@ function allListings(userID) {
     return availableItems;
 }
 
+/*returns the IDs of all items put to sell by user */
+function itemsToSell(userID) {
+    let itemsToSell = [];
+    var logElements = (value, key, map) => {
+        if (!value.buyer && userID === value.seller) {
+            itemsToSell.push(key);
+        }
+    }
+    listing.forEach(logElements);
+    // console.log(listing, availableItems)
+    return itemsToSell;
+}
+
 /*
 searchForListings returns the IDs of all the listings currently on the market
 Once an item is sold, it will not be returned by searchForListings
@@ -318,7 +307,8 @@ module.exports = {
     signUp,
     login,
     getUsername,
-    uploadImage
+    uploadImage,
+    itemsToSell
 
 
 
