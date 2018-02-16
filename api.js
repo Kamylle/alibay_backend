@@ -1,12 +1,14 @@
 const alibay = require('./alibay');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const session = require('express-session');
+const cors = require('cors');
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.raw({ type: 'image/*', limit: '20mb' })); // To allow for image uploads.
 app.use(bodyParser.json());
+app.use(express.static('images'));
 
 function generateUUID(){
     var d = new Date().getTime(),
@@ -25,7 +27,7 @@ app.use(session({
     },
     secret: 'mimainkabooskifu',
     cookie: {
-        maxAge: 600000
+        maxAge: 3600000 // 1 hour
     }
 }))
 
@@ -78,6 +80,19 @@ app.post('/createListing', (req, res) => {
     let blurb = req.body.blurb;
     res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb)));
 });
+
+app.post('/uploadedPictures', (req, res) => {
+    // Splits on all dots, but returns (pop) the extension (last piece)
+    // const extension = req.query.ext.split('.').pop(); 
+    // const randomString = '' +  Math.floor(Math.random() * 9999999999999);
+    // const randomFilename = randomString + '.' + extension;
+    // fs.writeFileSync('images/' + randomFilename, req.body);
+    // res.send(randomFilename);
+    const extension = req.query.ext.split('.').pop(); 
+    const requestBody = req.body;
+    res.send(JSON.stringify(alibay.uploadImage(extension, requestBody)));
+
+})
 
 app.post('/getItemDescription', (req, res) => {
     let listingID = req.body.listingID;

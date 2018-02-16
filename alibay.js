@@ -54,9 +54,9 @@ listing.set(tempItems[8], tempContent[8]);
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
 function genUID() {
-    var genId = Math.floor(Math.random() * 1000000000000);
-    console.log(genId, genId.toString())
-    return genId.toString();
+    var random = Math.floor(Math.random() * 1000000000000);
+    return random.toString();
+    //return random;
 }
 
 function putItemsBought(userID, value) {
@@ -193,7 +193,7 @@ function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
     var seller = item.seller;
-    console.log(seller)
+    
     if (seller === buyerID) {
         return "You can't buy your own items";
     }
@@ -271,6 +271,16 @@ function getUsername(uID) {
     }
 }
 
+/*
+Image upload
+*/
+function uploadImage(extension, requestBody) {
+    const randomString = '' +  Math.floor(Math.random() * 9999999999999);
+    const filename = randomString + '.' + extension;
+    fs.writeFileSync('images/' + filename, requestBody);
+    return fileName;
+}
+
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 
     initializeUserIfNeeded,
@@ -284,8 +294,7 @@ module.exports = {
     allListings,
     searchForListings,
     signUp,
-    login,
-    getUsername
+    login
 
 
     // Add all the other functions that need to be exported
