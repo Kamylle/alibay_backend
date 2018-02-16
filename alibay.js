@@ -186,6 +186,7 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
+    var seller = item.seller;
     
     if (seller === buyerID) {
         return "You can't buy your own items";
@@ -261,6 +262,16 @@ function getUsername(uID) {
             return key;
         }
     }
+}
+
+/*
+Image upload
+*/
+function uploadImage(extension, requestBody) {
+    const randomString = '' +  Math.floor(Math.random() * 9999999999999);
+    const filename = randomString + '.' + extension;
+    fs.writeFileSync('images/' + filename, requestBody);
+    return fileName;
 }
 
 module.exports = {

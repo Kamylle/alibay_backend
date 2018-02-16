@@ -3,7 +3,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-const fs = require('fs');
 const app = express();
 
 app.use(cors());
@@ -84,11 +83,16 @@ app.post('/createListing', (req, res) => {
 });
 
 app.post('/uploadedPictures', (req, res) => {
-    const extension = req.query.ext.split('.').pop(); // Splits on all dots, but returns (pop) the extension (last piece)
-    const randomString = '' +  Math.floor(Math.random() * 9999999999999)
-    const randomFilename = randomString + '.' + extension
-    fs.writeFileSync('images/' + randomFilename, req.body);
-    res.send(randomFilename);
+    // Splits on all dots, but returns (pop) the extension (last piece)
+    // const extension = req.query.ext.split('.').pop(); 
+    // const randomString = '' +  Math.floor(Math.random() * 9999999999999);
+    // const randomFilename = randomString + '.' + extension;
+    // fs.writeFileSync('images/' + randomFilename, req.body);
+    // res.send(randomFilename);
+    const extension = req.query.ext.split('.').pop(); 
+    const requestBody = req.body;
+    res.send(JSON.stringify(alibay.uploadImage(extension, requestBody)));
+
 })
 
 app.post('/getItemDescription', (req, res) => {
@@ -122,4 +126,4 @@ app.get('/getUsername', (req, res) => {
     res.send(JSON.stringify(alibay.getUsername(userID)));
 });
 
-app.listen(3004, () => console.log('Listening on port 3004!'))
+app.listen(4000, () => console.log('Listening on port 4000!'))
