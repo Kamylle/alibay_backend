@@ -186,7 +186,6 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
-    //var seller = item.seller;
     
     if (seller === buyerID) {
         return "You can't buy your own items";
@@ -277,8 +276,7 @@ module.exports = {
     allListings,
     searchForListings,
     signUp,
-    login,
-    getUsername
+    login
 
 
     // Add all the other functions that need to be exported

@@ -1,12 +1,15 @@
 const alibay = require('./alibay');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const session = require('express-session');
+const cors = require('cors');
+const fs = require('fs');
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.raw({ type: 'image/*', limit: '20mb' })); // To allow for image uploads.
 app.use(bodyParser.json());
+app.use(express.static('images'));
 
 function generateUUID(){
     var d = new Date().getTime(),
@@ -25,7 +28,7 @@ app.use(session({
     },
     secret: 'mimainkabooskifu',
     cookie: {
-        maxAge: 600000
+        maxAge: 3600000 // 1 hour
     }
 }))
 
@@ -80,6 +83,14 @@ app.post('/createListing', (req, res) => {
     res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb)));
 });
 
+app.post('/uploadedPictures', (req, res) => {
+    const extension = req.query.ext.split('.').pop(); // Splits on all dots, but returns (pop) the extension (last piece)
+    const randomString = '' +  Math.floor(Math.random() * 9999999999999)
+    const randomFilename = randomString + '.' + extension
+    fs.writeFileSync('images/' + randomFilename, req.body);
+    res.send(randomFilename);
+})
+
 app.post('/getItemDescription', (req, res) => {
     let listingID = req.body.listingID;
     res.send(JSON.stringify(alibay.getItemDescription(listingID)));
@@ -111,4 +122,4 @@ app.get('/getUsername', (req, res) => {
     res.send(JSON.stringify(alibay.getUsername(userID)));
 });
 
-app.listen(4000, () => console.log('Listening on port 4000!'))
+app.listen(3004, () => console.log('Listening on port 3004!'))
