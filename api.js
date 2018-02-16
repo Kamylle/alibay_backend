@@ -112,18 +112,24 @@ app.get('/allItemsSold', (req, res) => {
 });
 
 app.get('/allListings', (req, res) => {
-    res.send(JSON.stringify(alibay.allListings()));
+    let uid = req.query.uid;
+    res.send(JSON.stringify(alibay.allListings(uid)));
 });
 
 app.post('/searchForListings', (req, res) => {
     let searchTerm = req.body.searchTerm; /*Should we change Query for Body?*/
-    console.log(searchTerm)
+    // console.log(searchTerm)
     res.send(JSON.stringify(alibay.searchForListings(searchTerm)));
 });
 
 app.get('/getUsername', (req, res) => {
     let userID = req.query.userID;
     res.send(JSON.stringify(alibay.getUsername(userID)));
+});
+
+app.get('/removedItems', (req, res) => {
+    let uid = req.query.uid;
+    res.send(JSON.stringify(alibay.removeItem(uid)));
 });
 
 app.listen(4000, () => console.log('Listening on port 4000!'))

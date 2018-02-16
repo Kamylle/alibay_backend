@@ -106,7 +106,7 @@ function signUp(username, password) {
 function login(username, password) {
     try {
         if (loginInfos[username].password === password) {
-            console.log(loginInfos[username]);
+            // console.log(loginInfos[username]);
             return loginInfos[username].userID;
         }
         else {
@@ -154,7 +154,7 @@ function createListing(sellerID, price, blurb) {
         "buyer": false
     };
   listing.set(listingID, listingItem);
-  console.log(listingItem)
+//   console.log(listingItem)
   fs.writeFileSync('listing-infos.txt', mapToJson(listing));
   return listingID;
 }
@@ -228,15 +228,15 @@ allListings returns the IDs of all the listings currently on the market
 Once an item is sold, it will not be returned by allListings
     returns: an array of listing IDs
 */
-function allListings() {
+function allListings(userID) {
     let availableItems = [];
     var logElements = (value, key, map) => {
-        if (!value.buyer) {
+        if (!value.buyer && userID !== value.seller) {
             availableItems.push(key);
         }
     }
     listing.forEach(logElements);
-    console.log(listing, availableItems)
+    // console.log(listing, availableItems)
     return availableItems;
 }
 
@@ -276,9 +276,25 @@ Image upload
 */
 function uploadImage(extension, requestBody) {
     const randomString = '' +  Math.floor(Math.random() * 9999999999999);
-    const filename = randomString + '.' + extension;
-    fs.writeFileSync('images/' + filename, requestBody);
+    const fileName = randomString + '.' + extension;
+    fs.writeFileSync('images/' + fileName, requestBody);
     return fileName;
+}
+
+/*
+Remove Item 
+*/
+
+function removeItem(userID) {
+    var arrayOfListings = [];
+
+    var logElements = (value, key, map) => {
+        if (value.seller === userID && value.buyer === userID) {
+            arrayOfListings.pop(key);
+        }
+    }
+    listing.forEach(logElements);
+    return arrayOfListings;
 }
 
 module.exports = {
@@ -294,7 +310,9 @@ module.exports = {
     allListings,
     searchForListings,
     signUp,
-    login
+    login,
+    uploadImage,
+    removeItem
 
 
     // Add all the other functions that need to be exported
