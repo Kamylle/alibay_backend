@@ -54,9 +54,9 @@ listing.set(tempItems[8], tempContent[8]);
 Before implementing the login functionality, use this function to generate a new UID every time.
 */
 function genUID() {
-    var random = Math.floor(Math.random() * 1000000000000);
-    return random
-    // .toString();
+    var genId = Math.floor(Math.random() * 1000000000000);
+    console.log(genId, genId.toString())
+    return genId.toString();
 }
 
 function putItemsBought(userID, value) {
@@ -106,6 +106,7 @@ function signUp(username, password) {
 function login(username, password) {
     try {
         if (loginInfos[username].password === password) {
+            console.log(loginInfos[username]);
             return loginInfos[username].userID;
         }
         else {
@@ -191,8 +192,8 @@ The seller will see the listing in his history of items sold
 function buy(buyerID, listingID) {
     var item = listing.get(listingID);
     var buyer = item.buyer;
-    //var seller = item.seller;
-    
+    var seller = item.seller;
+    console.log(seller)
     if (seller === buyerID) {
         return "You can't buy your own items";
     }
@@ -235,6 +236,7 @@ function allListings() {
         }
     }
     listing.forEach(logElements);
+    console.log(listing, availableItems)
     return availableItems;
 }
 

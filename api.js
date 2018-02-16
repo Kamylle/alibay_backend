@@ -45,14 +45,14 @@ app.post('/signUp', (req, res) => {
     let password = req.body.password;
 
     res.send(JSON.stringify(alibay.signUp(username, password)));
-    req.session.uid = JSON.stringify(alibay.login(username, password));
+    req.session.uid = alibay.login(username, password);
 })
 
 app.post('/login', (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
 
-    req.session.uid = JSON.stringify(alibay.login(username, password));
+    req.session.uid = alibay.login(username, password);
     res.send(JSON.stringify(alibay.login(username, password)));
 })
 
@@ -68,7 +68,7 @@ app.get('/itemsBought', (req, res) => {
 });
 
 app.get('/allItemsBought', (req, res) => {
-    let uid = req.body.uid;
+    let uid = req.query.uid;
     res.send(JSON.stringify(alibay.allItemsBought(uid)));
 });
 
