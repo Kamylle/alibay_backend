@@ -55,8 +55,8 @@ Before implementing the login functionality, use this function to generate a new
 */
 function genUID() {
     var random = Math.floor(Math.random() * 1000000000000);
-    //return random.toString();
-    return random;
+    return random.toString();
+    //return random;
 }
 
 function putItemsBought(userID, value) {
