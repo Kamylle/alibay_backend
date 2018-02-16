@@ -28,27 +28,27 @@ loginInfos = JSON.parse(loginData);
 
 /*Temporary Fake items*/
 
-var tempItems = ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9"];
-var tempContent = [
-    {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
-    {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
-    {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
-    {"seller": "11111111","price": "400","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "500","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "600","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
-    {"seller": "11111111","price": "700","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
-    {"seller": "22222222","price": "800","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
-    {"seller": "33333333","price": "900","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
-];
-listing.set(tempItems[0], tempContent[0]);
-listing.set(tempItems[1], tempContent[1]);
-listing.set(tempItems[2], tempContent[2]);
-listing.set(tempItems[3], tempContent[3]);
-listing.set(tempItems[4], tempContent[4]);
-listing.set(tempItems[5], tempContent[5]);
-listing.set(tempItems[6], tempContent[6]);
-listing.set(tempItems[7], tempContent[7]);
-listing.set(tempItems[8], tempContent[8]);
+// var tempItems = ["Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7", "Item8", "Item9"];
+// var tempContent = [
+//     {"seller": "11111111","price": "100","blurb": "Vendu par User1 - acheté par personne","buyer": false},
+//     {"seller": "22222222","price": "200","blurb": "Vendu par User2 - acheté par personne","buyer": false},
+//     {"seller": "33333333","price": "300","blurb": "Vendu par User3 - acheté par personne","buyer": false},
+//     {"seller": "11111111","price": "400","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+//     {"seller": "22222222","price": "500","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+//     {"seller": "33333333","price": "600","blurb": "Vendu par User3 - acheté par User1","buyer": "11111111"},
+//     {"seller": "11111111","price": "700","blurb": "Vendu par User1 - acheté par User2","buyer": "22222222"},
+//     {"seller": "22222222","price": "800","blurb": "Vendu par User2 - acheté par User1","buyer": "11111111"},
+//     {"seller": "33333333","price": "900","blurb": "Vendu par User3 - acheté par User3","buyer": "33333333"}
+// ];
+// listing.set(tempItems[0], tempContent[0]);
+// listing.set(tempItems[1], tempContent[1]);
+// listing.set(tempItems[2], tempContent[2]);
+// listing.set(tempItems[3], tempContent[3]);
+// listing.set(tempItems[4], tempContent[4]);
+// listing.set(tempItems[5], tempContent[5]);
+// listing.set(tempItems[6], tempContent[6]);
+// listing.set(tempItems[7], tempContent[7]);
+// listing.set(tempItems[8], tempContent[8]);
 
 /*
 Before implementing the login functionality, use this function to generate a new UID every time.
@@ -143,7 +143,7 @@ This function is incomplete. You need to complete it.
       [blurb] A blurb describing the item
     returns: The ID of the new listing
 */
-function createListing(sellerID, price, blurb) {
+function createListing(sellerID, price, blurb, description, imagePath) {
 
     let listingID = genUID();
 
@@ -151,7 +151,9 @@ function createListing(sellerID, price, blurb) {
         "seller": sellerID,
         "price": price,
         "blurb": blurb,
-        "buyer": false
+        "buyer": false,
+        "description": description,
+        "imagePath": imagePath
     };
   listing.set(listingID, listingItem);
 //   console.log(listingItem)
@@ -168,12 +170,16 @@ function getItemDescription(listingID) {
     var item = listing.get(listingID);
     var price = item.price;
     var blurb = item.blurb;
-    var seller = item.seller
+    var seller = item.seller;
+    var description = item.description;
+    var imagePath = item.imagePath;
 
     let itemGot = {
         "price": price,
         "blurb": blurb,
-        "seller": seller
+        "seller": seller,
+        "description": description,
+        "imagePath": imagePath
     };
     return itemGot;
 }
@@ -285,17 +291,17 @@ function uploadImage(extension, requestBody) {
 Remove Item 
 */
 
-function removeItem(userID) {
-    var arrayOfListings = [];
+// function removeItem(userID) {
+//     var arrayOfListings = [];
 
-    var logElements = (value, key, map) => {
-        if (value.seller === userID && value.buyer === userID) {
-            arrayOfListings.pop(key);
-        }
-    }
-    listing.forEach(logElements);
-    return arrayOfListings;
-}
+//     var logElements = (value, key, map) => {
+//         if (value.seller === userID && value.buyer === userID) {
+//             arrayOfListings.pop(key);
+//         }
+//     }
+//     listing.forEach(logElements);
+//     return arrayOfListings;
+// }
 
 module.exports = {
     genUID, // This is just a shorthand. It's the same as genUID: genUID. 

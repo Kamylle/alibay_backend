@@ -78,7 +78,9 @@ app.post('/createListing', (req, res) => {
     let sellerID = req.body.sellerID;
     let price = req.body.price;
     let blurb = req.body.blurb;
-    res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb)));
+    let description = req.body.description;
+    let imagePath = req.body.picturePath;
+    res.send(JSON.stringify(alibay.createListing(sellerID, price, blurb,description, imagePath)));
 });
 
 app.post('/uploadedPictures', (req, res) => {
@@ -126,9 +128,9 @@ app.get('/getUsername', (req, res) => {
     res.send(JSON.stringify(alibay.getUsername(userID)));
 });
 
-app.get('/removedItems', (req, res) => {
-    let uid = req.query.uid;
-    res.send(JSON.stringify(alibay.removeItem(uid)));
-});
+// app.get('/removedItems', (req, res) => {
+//     let uid = req.query.uid;
+//     res.send(JSON.stringify(alibay.removeItem(uid)));
+// });
 
 app.listen(4000, () => console.log('Listening on port 4000!'))
